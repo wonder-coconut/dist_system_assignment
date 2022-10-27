@@ -20,8 +20,12 @@ while True:
 
     for socket in readsocket:
         if (socket == server) :
-            message = socket.recv(2048)
-            print(str(message, encoding= 'ascii', errors= 'ignore'))
+            message = str(socket.recv(2048), encoding= 'ascii', errors= 'ignore')
+            if(message == '\close'):
+                server.close()
+                exit()
+            print(message)
+            
         else :
             message = sys.stdin.readline()
             if(message == '\close\n'):
