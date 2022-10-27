@@ -22,15 +22,15 @@ server.listen(25)
 
 clientList = []
 
-def closeserver():
+def closeserver(): #function to shutdown server and connected clients
     input = sys.stdin.readline()
     if(input == "\close\n"):
         print('closing server')
         server.close()
-        sendtochatroom('\close', None)
+        sendtochatroom('\close', None) #shutdown command to clients
         os._exit(os.EX_OK)
 
-def sendtochatroom(message, client) :
+def sendtochatroom(message, client) : #send message to every client except parameter client
     for user in clientList :
         if (user != client) :
             try :
@@ -39,9 +39,9 @@ def sendtochatroom(message, client) :
                 print('sendtochatroom() : ' + str(e))
                 print('message: ' + message)
                 user.close()
-                clientList.remove(user)
+                clientList.remove(user) #dead client
 
-def clientthread(client, addr):
+def clientthread(client, addr): #new client functionality
     client.send(bytes(f"connected to chat room at : {host_ip}:{port}", encoding='utf-8'))
 
     while True:
@@ -59,8 +59,7 @@ _thread.start_new_thread(closeserver, ())
 
 while True :
 
-    client, addr = server.accept()
+    client, addr = server.accept() #new client
     clientList.append(client)
     print(addr[0] + " added to the room")
     _thread.start_new_thread(clientthread,(client,addr)) #seperate thread for each client
-

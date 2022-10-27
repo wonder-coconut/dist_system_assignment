@@ -16,17 +16,17 @@ while True:
 
     socketlist = [sys.stdin,server]
 
-    readsocket, writesocket, errorsocket = select.select(socketlist, [], [])
+    readsocket, writesocket, errorsocket = select.select(socketlist, [], []) #server socket or terminal input for message
 
     for socket in readsocket:
-        if (socket == server) :
+        if (socket == server) : #server message incoming
             message = str(socket.recv(2048), encoding= 'ascii', errors= 'ignore')
             if(message == '\close'):
                 server.close()
                 exit()
             print(message)
-            
-        else :
+
+        else : #client message outgoing
             message = sys.stdin.readline()
             if(message == '\close\n'):
                 server.close()
